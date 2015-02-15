@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
@@ -12,7 +12,3 @@ class Profile(models.Model):
     def create_profile(sender, instance, created, **kwargs):
         if created:
             Profile.objects.create(account=instance)
-
-    @receiver(post_delete, sender='accounts.Account')
-    def delete_profile(sender, instance, **kwargs):
-        Profile.objects.delete(account=instance)
