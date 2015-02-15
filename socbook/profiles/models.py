@@ -7,6 +7,7 @@ class Profile(models.Model):
     account = models.ForeignKey('accounts.Account')
     location = models.CharField(max_length=75, blank=True)
     friends = models.ManyToManyField('self', null=True, blank=True)
+    site = models.URLField(blank=True)
 
     @receiver(post_save, sender='accounts.Account')
     def create_profile(sender, instance, created, **kwargs):
