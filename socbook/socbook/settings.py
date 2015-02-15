@@ -27,8 +27,10 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-# Application definition
+# Custom user
+AUTH_USER_MODEL = 'accounts.Account'
 
+# Application definition
 INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
