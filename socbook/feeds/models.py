@@ -4,8 +4,8 @@ from django.db import models
 class Publication(models.Model):
     PUBLIC, PRIVATE = range(2)
     VISIBILITY_CHOICES = (
-        PUBLIC, 'Public',
-        PRIVATE, 'Private')
+        (PUBLIC, 'Public'),
+        (PRIVATE, 'Private'))
 
     author = models.ForeignKey('profiles.Profile', null=True)
     title = models.CharField(max_length=125, blank=False)
