@@ -41,6 +41,7 @@ INSTALLED_APPS = (
 
     # User apps
     'accounts',
+    'profiles',
 )
 
 MIDDLEWARE_CLASSES = (
