@@ -5,6 +5,7 @@ from django.dispatch import receiver
 
 class Profile(models.Model):
     account = models.ForeignKey('accounts.Account')
+    birthday = models.DateField(null=True)
     location = models.CharField(max_length=75, blank=True)
     friends = models.ManyToManyField('self', null=True, blank=True)
     site = models.URLField(blank=True)
