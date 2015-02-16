@@ -4,7 +4,7 @@ python:
     - '3.4'
 
 install:
-    - pip install -r requirements.pip --use-mirrors
+    - pip install -r travis.pip --use-mirrors
 
 script:
     - cd socbook
