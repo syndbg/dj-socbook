@@ -4,9 +4,10 @@ from activities.models import Activity
 
 
 class Publication(models.Model):
-    PUBLIC, PRIVATE = range(2)
+    PUBLIC, FRIENDS, PRIVATE = range(3)
     VISIBILITY_CHOICES = (
         (PUBLIC, 'Public'),
+        (FRIENDS, 'Friends'),
         (PRIVATE, 'Private'))
 
     author = models.ForeignKey('profiles.Profile', null=True)
@@ -17,6 +18,11 @@ class Publication(models.Model):
     @property
     def likes(self):
         return Activity.objects.filter(type=Activity.LIKE, publication=self)
+
+    @property
+    def first_like_and_others(self):
+        likes = self.likes.all()
+        return likes[0], likes[1:]
 
     @property
     def likes_count(self):
