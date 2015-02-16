@@ -1,13 +1,6 @@
 [run]
 source = socbook
-omit =
-    */migrations/*
-    socbook*,
-    */admin.py,
-    */tests.py,
-    */__init__.py,
-    manage.py,
-    */south_migrations/*
+omit = */migrations/*,socbook*,*/admin.py,*/tests.py,*/__init__.py,manage.py,*/south_migrations/*
 
 [report]
 exclude_lines =
