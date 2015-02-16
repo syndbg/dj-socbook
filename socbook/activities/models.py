@@ -54,8 +54,8 @@ class Activity(models.Model):
     to_profile = models.ForeignKey('profiles.Profile', null=True)
 
     def edit(self, new_content):
-        if self.type != self.COMMENT:
-            raise ValueError('Can\'t edit a non-comment!')
+        if self.type != self.COMMENT or self.type != self.PROFILE_POST:
+            raise ValueError('Can\'t edit a non-comment or profile post!')
         if not new_content:
             return self
         self.content = new_content
@@ -63,7 +63,8 @@ class Activity(models.Model):
 
     @receiver(post_save, sender='activities.Activity')
     def create_notifications(sender, instance, created, raw, using, update_fields, **kwargs):
-        pass
+        if created:
+            Notification.objects.create(activity=instance, type=instance.type)
 
 
 class Notification(models.Model):
