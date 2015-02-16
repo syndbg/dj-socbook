@@ -5,6 +5,12 @@
 A Django Social Network (facebook) clone/example.
 
 
+## Thoughts about project's
+
+* [architecture](ARCHITECTURE.MD)
+* design (TO-DO)
+
+
 ## Roadmap
 
 x.x.x - Do stuff until 1.0.0. is met :smile:
