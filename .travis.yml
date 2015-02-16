@@ -3,7 +3,7 @@ python:
     - '3.4'
 
 install:
-    - pip install -r travis.pip --use-mirrors
+    - pip install -r requirements/travis.pip
 
 script:
     - cd socbook
