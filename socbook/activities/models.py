@@ -8,23 +8,21 @@ class ActivityManager(models.Manager):
     def __create_activity(self, type, profile, content, to_activity, to_publication, to_profile):
         if not profile:
             raise ValueError('No profile given!')
-        if to_activity and to_publication and to_profile:
-            raise ValueError(
-                'Can\'t create an activity regarding more than one instance!')
+        if (to_activity and to_publication) or (to_activity and to_profile) or (to_publication and to_profile):
+            raise ValueError('Can\'t create an activity regarding more than one instance!')
         elif not to_activity and not to_publication and not to_profile:
-            raise ValueError(
-                'Can\'t create an activity based regarding nothing!')
+            raise ValueError('Can\'t create an activity regarding nothing!')
         return Activity.objects.create(type=type, profile=profile, to_activity=to_activity, to_publication=to_publication, to_profile=to_profile)
 
-    def comment(self, profile, content, to_activity, to_publication):
+    def comment(self, profile, content='', to_activity=None, to_publication=None):
         if not content:
             raise ValueError('Can\'t add an empty comment!')
         return self.__create_activity(Activity.COMMENT, profile, content, to_activity, to_publication, None)
 
-    def like(self, profile, to_activity, to_publication):
+    def like(self, profile, to_activity=None, to_publication=None):
         return self.__create_activity(Activity.LIKE, profile, '', to_activity, to_publication, None)
 
-    def profile_post(self, profile, content, to_profile):
+    def profile_post(self, profile, content=None, to_profile=None):
         if not content:
             raise ValueError('Can\'t add an empty profile post!')
         return self.__create_activity(Activity.PROFILE_POST, profile, content, None, None, to_profile)
