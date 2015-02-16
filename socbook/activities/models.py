@@ -45,14 +45,14 @@ class Activity(models.Model):
 
     # related to comment or to_profile post
     last_modified = models.DateTimeField(auto_now=True, null=True)
-    content = models.TextField(max_length=500, blank=True, default='')
+    content = models.CharField(max_length=500, blank=True, default='')
     # to one of them
     to_activity = models.ForeignKey('self', null=True)
     to_publication = models.ForeignKey('feeds.Publication', null=True)
     to_profile = models.ForeignKey('profiles.Profile', null=True)
 
     def edit(self, new_content):
-        if self.type != self.COMMENT or self.type != self.PROFILE_POST:
+        if self.type != self.COMMENT and self.type != self.PROFILE_POST:
             raise ValueError('Can\'t edit a non-comment or profile post!')
         if not new_content:
             return self
