@@ -1,5 +1,7 @@
 from django.db import models
 
+from activities.models import Activity
+
 
 class Publication(models.Model):
     PUBLIC, PRIVATE = range(2)
@@ -13,21 +15,17 @@ class Publication(models.Model):
     visibility = models.SmallIntegerField(choices=VISIBILITY_CHOICES, default=PUBLIC)
 
     @property
+    def likes(self):
+        return Activity.objects.filter(type=Activity.LIKE, publication=self)
+
+    @property
     def likes_count(self):
         return self.likes.count()
 
     @property
+    def comments(self):
+        return Activity.objects.filter(type=Activity.COMMENT, publication=self)
+
+    @property
     def comments_count(self):
         return self.comments.count()
-
-
-class PublicationComment(models.Model):
-    author = models.ForeignKey('profiles.Profile', null=True)
-    content = models.TextField(max_length=500, blank=False)
-    date_posted = models.DateTimeField(auto_now_add=True)
-    publication = models.ForeignKey(Publication, related_name='comments')
-
-
-class PublicationLike(models.Model):
-    author = models.ForeignKey('profiles.Profile', null=True)
-    publication = models.ForeignKey(Publication, related_name='likes')
