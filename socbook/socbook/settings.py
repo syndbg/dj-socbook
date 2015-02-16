@@ -41,6 +41,7 @@ INSTALLED_APPS = (
 
     # User apps
     'accounts',
+    'activities',
     'profiles',
     'feeds',
 )
