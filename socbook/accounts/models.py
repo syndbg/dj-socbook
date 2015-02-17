@@ -74,12 +74,12 @@ class FriendRequest(models.Model):
             friend_request_sent.send(sender=instance.__class__, from_account=instance.from_account, to_account=instance.to_account)
 
     def accept(self):
-        """Accepts a FriendRequest, befriends from_account and to_account, emits an account_befriended signal
-           for Activity to pick up and emits a friend_request_accepted signal for Notification to pick up."""
+        """Accepts a FriendRequest, emits a friend_request_accepted signal for Notification to pick up,
+           befriends from_account and to_account and emits an account_befriended signal for Activity to pick up."""
         self.status = self.ACCEPTED
         self.save(update_fields=['status'])
-        self.from_account.befriend(self.to_account)
         friend_request_accepted.send(sender=self.__class__, from_account=self.from_account, to_account=self.to_account)
+        self.from_account.befriend(self.to_account)
 
     def reject(self):
         """Rejects a FriendRequest and emits a friend_request_rejected signal for Notification to pick up"""
