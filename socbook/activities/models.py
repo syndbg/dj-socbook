@@ -7,7 +7,7 @@ from feeds.models import Publication
 
 
 class Activity(models.Model):
-    LIKE, COMMENT, BEFRIEND, PUBLISH, SHARE, REGISTER, = range(5)
+    LIKE, COMMENT, BEFRIEND, PUBLISH, SHARE, REGISTER, = range(6)
     TYPE_CHOICES = (
         (LIKE, 'like'),
         (COMMENT, 'comment'),
