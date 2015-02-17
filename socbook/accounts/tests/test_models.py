@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from accounts.models import Account
+from accounts.models import Account, Profile, FriendRequest
 
 
 class AccountModelTests(TestCase):
@@ -44,3 +44,19 @@ class AccountModelTests(TestCase):
         self.account.befriend(other_account)
         self.assertTrue(self.account.is_friend(other_account))
         self.assertTrue(other_account.is_friend(self.account))
+
+    def test_send_friend_request(self):
+        other_account = Account.objects.create(username='guido', first_name='Guido', last_name='van Rossum', email='python@python.com')
+        before_friend_requests_count = FriendRequest.objects.count()
+        friend_request = self.account.send_friend_request(other_account)
+        after_friend_requests_count = FriendRequest.objects.count()
+
+        self.assertIs(self.account, friend_request.from_account)
+        self.assertIs(other_account, friend_request.to_account)
+        self.assertEqual(after_friend_requests_count, before_friend_requests_count + 1)
+
+    def test_send_friend_request_when_already_sent(self):
+        other_account = Account.objects.create(username='guido', first_name='Guido', last_name='van Rossum', email='python@python.com')
+        self.account.send_friend_request(other_account)
+        with self.assertRaises(ValueError):
+            self.account.send_friend_request(other_account)

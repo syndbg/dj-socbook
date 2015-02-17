@@ -34,9 +34,9 @@ class Account(AbstractUser):
 
     def send_friend_request(self, to_account):
         try:
-            FriendRequest.objects.create(from_account=self, to_account=to_account)
+            return FriendRequest.objects.create(from_account=self, to_account=to_account)
         except Exception:
-            pass
+            raise ValueError('Friend request already sent')
 
 
 class Profile(models.Model):
