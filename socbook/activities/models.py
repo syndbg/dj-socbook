@@ -2,75 +2,53 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-
-class ActivityManager(models.Manager):
-
-    def __create_activity(self, type, profile, content, to_activity, to_publication, to_profile):
-        if not profile:
-            raise ValueError('No profile given!')
-        if (to_activity and to_publication) or (to_activity and to_profile) or (to_publication and to_profile):
-            raise ValueError('Can\'t create an activity regarding more than one instance!')
-        elif not to_activity and not to_publication and not to_profile:
-            raise ValueError('Can\'t create an activity regarding nothing!')
-        return Activity.objects.create(type=type, profile=profile, to_activity=to_activity, to_publication=to_publication, to_profile=to_profile)
-
-    def comment(self, profile, content='', to_activity=None, to_publication=None):
-        if not content:
-            raise ValueError('Can\'t add an empty comment!')
-        return self.__create_activity(Activity.COMMENT, profile, content, to_activity, to_publication, None)
-
-    def like(self, profile, to_activity=None, to_publication=None):
-        return self.__create_activity(Activity.LIKE, profile, '', to_activity, to_publication, None)
-
-    def profile_post(self, profile, content=None, to_profile=None):
-        if not content:
-            raise ValueError('Can\'t add an empty profile post!')
-        return self.__create_activity(Activity.PROFILE_POST, profile, content, None, None, to_profile)
+from accounts.signals import account_befriended, friend_request_accepted, friend_request_sent, new_profile_created
+from feeds.models import Publication
 
 
 class Activity(models.Model):
-    LIKE, COMMENT, BEFRIEND, PUBLISH, PROFILE_POST, DELETE = range(6)
+    LIKE, COMMENT, BEFRIEND, PUBLISH, SHARE, REGISTER, = range(5)
     TYPE_CHOICES = (
         (LIKE, 'like'),
         (COMMENT, 'comment'),
         (BEFRIEND, 'befriendment'),
         (PUBLISH, 'publication'),
-        (PROFILE_POST, 'profile post'),
-        (DELETE, 'deletetion'),
+        (SHARE, 'shared'),
+        (REGISTER, 'register'),
     )
     type = models.SmallIntegerField(choices=TYPE_CHOICES, default=LIKE)
-    profile = models.ForeignKey('profiles.Profile', related_name='activities')
+    account = models.ForeignKey('accounts.Account', related_name='activities')
     date = models.DateTimeField(auto_now_add=True)
-    objects = ActivityManager()
 
-    # related to comment or to_profile post
-    last_modified = models.DateTimeField(auto_now=True, null=True)
-    content = models.CharField(max_length=500, blank=True, default='')
+    STR_TEMPLATES = {
+        Activity.LIKE: '{account} liked {author}\'s {publication}',
+        Activity.COMMENT: '{account} commented on {author}\'s {publication}',
+        Activity.BEFRIEND: '{account} became friends with {other_account}',
+        # Activity.PUBLISH: '{account} posted {publication}',
+        Activity.SHARE: '{account} shared {author}\'s {publication}',
+        Activity.REGISTER: '{account} joined the network!',
+    }
+
     # to one of them
-    to_activity = models.ForeignKey('self', null=True)
-    to_publication = models.ForeignKey('feeds.Publication', null=True)
-    to_profile = models.ForeignKey('profiles.Profile', null=True)
+    to_account = models.ForeignKey('accounts.Account', null=True, related_name='foreign_activities')
+    to_publication = models.ForeignKey('feeds.Publication', null=True, related_name='activities')
+    visibility = models.SmallIntegerField(
+        choices=Publication.VISIBILITY_CHOICES, default=Publication.FRIENDS)
 
-    def edit(self, new_content):
-        if self.type != self.COMMENT and self.type != self.PROFILE_POST:
-            raise ValueError('Can\'t edit a non-comment or profile post!')
-        if not new_content:
-            return self
-        self.content = new_content
-        return self.save()
+    @receiver(new_profile_created, sender='accounts.Profile')
+    def create_new_profile_created_notification(sender, account):
+        Activity.objects.create(type=Activity.REGISTER, account=account, visibility=Publication.PUBLIC)
 
-    @receiver(post_save, sender='activities.Activity')
-    def create_notifications(sender, instance, created, raw, using, update_fields, **kwargs):
-        if created:
-            Notification.objects.create(activity=instance, type=instance.type)
+    @receiver(account_befriended, sender='accounts.Account')
+    def create_account_befriended(sender, account, other_account):
+        Activity.objects.create(type=Activity.BEFRIEND, account=account, to_account=other_account, visibility=Publication.PUBLIC)
 
 
 class Notification(models.Model):
-    activity = models.ForeignKey(Activity)
+    account = models.ForeignKey('accounts.Account', related_name='notifications')
     date = models.DateTimeField(auto_now_add=True)
     seen = models.BooleanField(default=False)
-    type = models.SmallIntegerField(
-        choices=Activity.TYPE_CHOICES, default=Activity.LIKE)
+    type = models.SmallIntegerField(choices=Activity.TYPE_CHOICES, default=Activity.LIKE)
 
     STR_TEMPLATES = {
         Activity.LIKE: '{profile} liked {to_profile}\'s {activity_type}',
