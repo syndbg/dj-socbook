@@ -7,7 +7,7 @@ A Django Social Network (facebook) clone/example.
 
 ## Thoughts about project's
 
-* [architecture](ARCHITECTURE.MD)
+* [architecture](ARCHITECTURE.md)
 * design (TO-DO)
 
 

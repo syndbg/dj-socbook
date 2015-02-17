@@ -1,34 +1,41 @@
 # Thoughts behind project's architecture decisions
 
 
-## Accounts
+## **Accounts**
 
 **Why `Account` and not `AbstractBaseUser`?**
 
-`AbstractBaseUser` has everything the project needs except `gender` field.
-It's more DRY and easier to maintain if I extend the super class.
+`AbstractBaseUser` has mandatory fields that will be utilized in the project.
+I want to a bit more so I would just extend. Re-inventing `AbstractBaseUser` from scratch is a bad practice in this case.
 
-## Activities
 
-**Why `Activity` of all types and not concrete classes ex. `ProfilePost`, `PublicationLike`?**
+## **Activities**
+
+~~**Why `Activity` of all types and not concrete classes ex. `ProfilePost`, `PublicationLike`?**
 
 All of posts, likes, comments and etc are __activities__. It makes more sense to me to have one class for that.
-IMO aggregation and signals registering is more sane, but maintainability may suffer a bit.
+IMO aggregation and signals registering is more sane, but maintainability may suffer a bit.~~
+
+I mix up `Publications` with `Activities`. To-be refactored.
 
 
-## Feeds
+## **Feeds**
 
-Are like `Linkedin's pulse`. They contain only `Publications`. Of course you can comment/like them using `Activity`.
+~~Are like `Linkedin's pulse`. They contain only `Publications`. Of course you can comment/like them using `Activity`.~~
+I'm wrong.
 
 
-## Profiles
+## **Profiles** - now part of **Accounts**
 
-Are essentially a wrapper for our extended `AbstractBaseUser` - `Account`.
+Are essentially a wrapper for our extended `AbstractBaseUser` - `Account`. (They are after the updated answer)
 
 **Why create a new class for that?**
 
-`Profiles` may have many more fields like `interests`, `groups`, `photos` and etc.
-Having a separate class for that gives me more possibilities to add features.
+~~`Profiles` may have many more fields like `interests`, `groups`, `photos` and etc.
+Having a separate class for that gives me more possibilities to add features.~~
+
+^ This is kind of wrong too. Most user info data should go to `Account` and leave `Profile` with `OneOnOne Account` and `CharField url`.
+This is much cleaner.
 
 
 **You just want to fake-delete profiles as Facebook does?**
