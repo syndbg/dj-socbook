@@ -152,3 +152,29 @@ class ActivityModelTests(TestCase):
 
         self.assertEqual(after_count, pre_count + 1)
         self.assertEqual(notification.type, new_activity.type)
+
+
+class NotificationModelTests(TestCase):
+
+    def setUp(self):
+        self.account = Account.objects.create(
+            first_name='Anton', last_name='Antonov', gender=Account.MALE)
+        self.profile = Profile.objects.last()
+        self.activity = Activity.objects.create(profile=self.profile)
+        self.notification = Notification.objects.last()
+
+    def test_instance_seen_has_default_false(self):
+        self.assertFalse(self.notification.seen)
+
+    def test_instance_date_has_default_auto_now_add(self):
+        self.assertIsNotNone(self.notification.date)
+
+    def test_instance_has_default_type_like(self):
+        self.assertEqual(Activity.LIKE, self.notification.type)
+
+    def test_string_representation_when_type_like(self):
+    def test_string_representation_when_type_comment(self):
+    def test_string_representation_when_type_befriend(self):
+    def test_string_representation_when_type_publish(self):
+    def test_string_representation_when_type_profile_post(self):
+    def test_string_representation_when_type_delete(self):
