@@ -13,7 +13,6 @@ class Account(AbstractUser):
         (FEMALE, 'Female'),
         (SECRET, 'Secret'))
     gender = models.SmallIntegerField(choices=GENDERS, default=SECRET)
-    account = models.ForeignKey('accounts.Account')
     birthday = models.DateField(null=True)
     friends = models.ManyToManyField('self', null=True, blank=True)
     location = models.CharField(max_length=75, blank=True)
@@ -38,7 +37,7 @@ class Account(AbstractUser):
 
 
 class Profile(models.Model):
-    account = models.OneToOneField(Account)
+    account = models.OneToOneField(Account, related_name='profile')
     url = models.URLField(blank=False)
 
     @receiver(post_save, sender=Account)
@@ -51,8 +50,8 @@ class Profile(models.Model):
 
 
 class FriendRequest(models.Model):
-    from_account = models.ForeignKey(Account)
-    to_account = models.ForeignKey(Account)
+    from_account = models.ForeignKey(Account, related_name='friend_requests_sent')
+    to_account = models.ForeignKey(Account, related_name='friend_requests_received')
 
     PENDING, ACCEPTED, REJECTED = range(3)
     STATUS_CHOICES = (
