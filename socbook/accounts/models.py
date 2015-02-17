@@ -46,8 +46,8 @@ class Profile(models.Model):
         """Creates a Profile and emits a signal for Activity to pick up and create an Activity and later Notification."""
         if created:
             url = '//{0}'.format(instance.account.username)
-            profile = Profile.objects.create(account=instance, url=url)
-            new_profile_created.send(sender=instance.__class__, account=profile.account, url=profile.url)
+            Profile.objects.create(account=instance, url=url)
+            new_profile_created.send(sender=instance.__class__, account=instance, url=url)
 
 
 class FriendRequest(models.Model):
@@ -66,9 +66,10 @@ class FriendRequest(models.Model):
         unique_together = (('from_account', 'to_account'),)
 
     @receiver(post_save, sender='accounts.FriendRequest')
-    def send_notification_signal(self):
+    def send_notification_signal(sender, instance, created, **kwargs):
         """Emits a friend_request_sent signal for Notification to pick up."""
-        friend_request_sent.send(sender=self.__class__, from_account=self.from_account, to_account=self.to_account)
+        if created:
+            friend_request_sent.send(sender=instance.__class__, from_account=instance.from_account, to_account=instance.to_account)
 
     def accept(self):
         """Accepts a FriendRequest, befriends from_account and to_account, emits an account_befriended signal
