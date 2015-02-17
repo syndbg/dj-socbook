@@ -33,6 +33,9 @@ class Account(AbstractUser):
     def is_friend(self, other_account):
         return self in other_account.friends and other_account in self.friends
 
+    def send_friend_request(self, to_account):
+        FriendRequest.objects.create(from_account=self, to_account=to_account)
+
 
 class Profile(models.Model):
     account = models.OneToOneField(Account)
