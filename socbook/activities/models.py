@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from accounts.signals import account_befriended, friend_request_accepted, friend_request_sent, friend_request_rejected, new_profile_created
@@ -36,11 +35,11 @@ class Activity(models.Model):
         choices=Publication.VISIBILITY_CHOICES, default=Publication.FRIENDS)
 
     @receiver(new_profile_created, sender='accounts.Profile')
-    def create_new_profile_created_notification(sender, account):
+    def create_new_profile_created_notification(sender, account, **kwargs):
         Activity.objects.create(type=Activity.REGISTER, account=account, visibility=Publication.PUBLIC)
 
     @receiver(account_befriended, sender='accounts.Account')
-    def create_account_befriended(sender, account, other_account):
+    def create_account_befriended(sender, account, other_account, **kwargs):
         Activity.objects.create(type=Activity.BEFRIEND, account=account, to_account=other_account, visibility=Publication.PUBLIC)
 
     # TO-DO after Publication
@@ -69,7 +68,7 @@ class Notification(models.Model):
         (FRIEND_REQUEST_SENT, 'friend request transmission'),
         (FRIEND_REQUEST_REJECTED, 'friend request rejectection'),
     )
-    type = models.SmallIntegerField(choices=TYPE_CHOICES, default=TYPE_CHOICES.LIKE)
+    type = models.SmallIntegerField(choices=TYPE_CHOICES, default=LIKE)
 
     # regarding one of them
     publication = models.ForeignKey('feeds.Publication', null=True)
@@ -85,15 +84,15 @@ class Notification(models.Model):
     }
 
     @receiver(friend_request_sent, sender='accounts.FriendRequest')
-    def create_friend_request_sent_notification(sender, from_account, to_account):
+    def create_friend_request_sent_notification(sender, from_account, to_account, **kwargs):
         Notification.objects.create(from_account=from_account, to_account=to_account, type=Notification.FRIEND_REQUEST_SENT)
 
     @receiver(friend_request_accepted, sender='accounts.FriendRequest')
-    def create_friend_requst_accepted_notification(sender, from_account, to_account):
+    def create_friend_requst_accepted_notification(sender, from_account, to_account, **kwargs):
         Notification.objects.create(from_account=from_account, to_account=to_account, type=Notification.FRIEND_REQUEST_ACCEPTED)
 
     @receiver(friend_request_rejected, sender='accounts.FriendRequest')
-    def create_friend_request_rejected_notification(sender, from_account, to_account):
+    def create_friend_request_rejected_notification(sender, from_account, to_account, **kwargs):
         Notification.objects.create(from_account=from_account, to_account=to_account, type=Notification.FRIEND_REQUEST_REJECTED)
 
     # TO-DO after Publication
