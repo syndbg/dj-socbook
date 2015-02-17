@@ -3,10 +3,10 @@
 
 ## **Accounts**
 
-**Why `Account` and not `AbstractBaseUser`?**
+**Why `Account` and not `AbstractUser`?**
 
-`AbstractBaseUser` has mandatory fields that will be utilized in the project.
-I want to add a bit more so I would just extend it. Re-inventing `AbstractBaseUser` from scratch is a bad practice in this case.
+`AbstractUser` has mandatory fields that will be utilized in the project.
+I want to add a bit more so I would just extend it. Re-inventing `AbstractUser` from scratch is a bad practice in this case.
 
 
 ## **Activities**
