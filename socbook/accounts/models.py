@@ -59,7 +59,7 @@ class FriendRequest(models.Model):
 
     @receiver(post_save, sender='accounts.FriendRequest')
     def send_notification_signal(self):
-        friend_request_sent.send(sender=self.__class__, from_account=from_account, to_account=self.to_account)
+        friend_request_sent.send(sender=self.__class__, from_account=self.from_account, to_account=self.to_account)
 
     def accept(self):
         self.status = self.ACCEPTED
