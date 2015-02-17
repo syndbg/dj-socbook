@@ -14,7 +14,7 @@ class Account(AbstractUser):
         (SECRET, 'Secret'))
     gender = models.SmallIntegerField(choices=GENDERS, default=SECRET)
     birthday = models.DateField(null=True)
-    friends = models.ManyToManyField('self', null=True, blank=True)
+    friends = models.ManyToManyField('self', symmetrical=True)
     location = models.CharField(max_length=75, blank=True)
     site = models.URLField(blank=True)
 
@@ -24,16 +24,19 @@ class Account(AbstractUser):
         """Adds accounts in both accounts' friends fields and emits a signal for Activity and Notification to pick up."""
         if not self.is_friend(other_account):
             self.friends.add(other_account)
-            self.friends.save(update_fields=['friends'])
+            self.save()
             other_account.friends.add(self)
-            other_account.save(update_fields=['friends'])
+            other_account.save()
             account_befriended.send(sender=self.__class__, account=self, other_account=other_account)
 
     def is_friend(self, other_account):
-        return self in other_account.friends and other_account in self.friends
+        return self in other_account.friends.all() and other_account in self.friends.all()
 
     def send_friend_request(self, to_account):
-        FriendRequest.objects.create(from_account=self, to_account=to_account)
+        try:
+            FriendRequest.objects.create(from_account=self, to_account=to_account)
+        except Exception:
+            pass
 
 
 class Profile(models.Model):
@@ -44,7 +47,7 @@ class Profile(models.Model):
     def create_profile(sender, instance, created, **kwargs):
         """Creates a Profile and emits a signal for Activity to pick up and create an Activity and later Notification."""
         if created:
-            url = '//{0}'.format(instance.account.username)
+            url = '//{0}'.format(instance.username)
             Profile.objects.create(account=instance, url=url)
             new_profile_created.send(sender=instance.__class__, account=instance, url=url)
 
