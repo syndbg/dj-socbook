@@ -21,12 +21,12 @@ class Activity(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     STR_TEMPLATES = {
-        Activity.LIKE: '<a href="{account_url}">{account}</a> liked <a href="{author_url}">{author}\'s</a> <a href="{publication_url}">{publication}</a>',
-        Activity.COMMENT: '<a href="{account_url}">{account}</a> commented on <a href="{author_url}">{author}\'s</a> <a href="{publication_url}">{publication}</a>',
-        Activity.BEFRIEND: '<a href="{account_url}">{account}</a> became friends with <a href="other_account_url}">{other_account}</a>',
+        LIKE: '<a href="{account_url}">{account}</a> liked <a href="{author_url}">{author}\'s</a> <a href="{publication_url}">{publication}</a>',
+        COMMENT: '<a href="{account_url}">{account}</a> commented on <a href="{author_url}">{author}\'s</a> <a href="{publication_url}">{publication}</a>',
+        BEFRIEND: '<a href="{account_url}">{account}</a> became friends with <a href="other_account_url}">{other_account}</a>',
         # TO-DO: Activity.PUBLISH: '{account} posted {publication}',
-        Activity.SHARE: '<a href="{account_url}">{account}</a> shared <a href="{author_url}">{author}\'s</a> <a href="{publication_url}">{publication}</a>',
-        Activity.REGISTER: '<a href="{account_url}">{account}</a> joined the network!',
+        SHARE: '<a href="{account_url}">{account}</a> shared <a href="{author_url}">{author}\'s</a> <a href="{publication_url}">{publication}</a>',
+        REGISTER: '<a href="{account_url}">{account}</a> joined the network!',
     }
 
     # to one of them
