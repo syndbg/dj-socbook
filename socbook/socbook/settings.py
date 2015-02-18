@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     # User apps
     'accounts',
     'activities',
-    'feeds',
+    'publications',
 )
 
 MIDDLEWARE_CLASSES = (
