@@ -2,7 +2,7 @@ from django.db import models
 from django.dispatch import receiver
 
 from accounts.signals import account_befriended, friend_request_accepted, friend_request_sent, friend_request_rejected, new_profile_created
-from feeds.models import Publication
+from publications.models import Publication
 
 
 class Activity(models.Model):
@@ -30,9 +30,17 @@ class Activity(models.Model):
 
     # to one of them
     to_account = models.ForeignKey('accounts.Account', null=True, related_name='foreign_activities')
-    to_publication = models.ForeignKey('feeds.Publication', null=True, related_name='activities')
+    to_publication = models.ForeignKey('publications.Publication', null=True, related_name='activities')
+
+    PUBLIC, FRIENDS, PRIVATE = range(3)
+    VISIBILITY_CHOICES = (
+        (PUBLIC, 'public'),
+        (FRIENDS, 'friends'),
+        (PRIVATE, 'private')
+    )
+
     visibility = models.SmallIntegerField(
-        choices=Publication.VISIBILITY_CHOICES, default=Publication.FRIENDS)
+        choices=VISIBILITY_CHOICES, default=FRIENDS)
 
     @receiver(new_profile_created, sender='accounts.Profile')
     def create_new_profile_created_notification(sender, account, **kwargs):
@@ -71,7 +79,7 @@ class Notification(models.Model):
     type = models.SmallIntegerField(choices=TYPE_CHOICES, default=LIKE)
 
     # regarding one of them
-    publication = models.ForeignKey('feeds.Publication', null=True)
+    publication = models.ForeignKey('publications.Publication', null=True)
     activity = models.ForeignKey(Activity, null=True)  # TO-DO: as in future Tagging?
     STR_TEMPLATES = {
         LIKE: '<a href="{from_profile_url}">{from_profile}</a> liked your <a href="{publication_url}">{publication_type}<a/>',

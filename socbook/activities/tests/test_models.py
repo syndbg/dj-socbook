@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from accounts.models import Account
 from activities.models import ActivityManager, Activity, Notification
-from feeds.models import Publication
+from publications.models import Publication
 from profiles.models import Profile
 
 
