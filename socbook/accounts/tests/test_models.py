@@ -42,6 +42,17 @@ class AccountModelTests(TestCase):
         self.assertTrue(self.account.is_friend(self.other_account))
         self.assertTrue(self.other_account.is_friend(self.account))
 
+    def test_unfriend_when_is_not_friend(self):
+        self.assertFalse(self.account.is_friend(self.other_account))
+        self.account.unfriend(self.other_account)
+        self.assertFalse(self.account.is_friend(self.other_account))
+
+    def test_unfriend_when_is_friend(self):
+        self.account.befriend(self.other_account)
+        self.assertTrue(self.account.is_friend(self.other_account))
+        self.account.unfriend(self.other_account)
+        self.assertFalse(self.account.is_friend(self.other_account))
+
     def test_send_friend_request(self):
         before_friend_requests_count = FriendRequest.objects.count()
         friend_request = self.account.send_friend_request(self.other_account)

@@ -32,9 +32,9 @@ class Account(AbstractUser):
     def unfriend(self, other_account):
         if self.is_friend(other_account):
             self.friends.remove(other_account)
-            self.save(update_fields=['friends'])
+            self.save()
             other_account.friends.remove(self)
-            other_account.save(update_fields=['friends'])
+            other_account.save()
 
     def is_friend(self, other_account):
         return self in other_account.friends.all() and other_account in self.friends.all()
