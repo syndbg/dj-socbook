@@ -29,6 +29,13 @@ class Account(AbstractUser):
             other_account.save()
             account_befriended.send(sender=self.__class__, account=self, other_account=other_account)
 
+    def unfriend(self, other_account):
+        if self.is_friend(other_account):
+            self.friends.remove(other_account)
+            self.save(update_fields=['friends'])
+            other_account.friends.remove(self)
+            other_account.save(update_fields=['friends'])
+
     def is_friend(self, other_account):
         return self in other_account.friends.all() and other_account in self.friends.all()
 
