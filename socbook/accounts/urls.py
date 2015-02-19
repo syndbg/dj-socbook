@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 
-urlpatterns = patterns('account.views',
+urlpatterns = patterns('accounts.views',
                        url(r'^signin/$', 'signin', name='signin'),
                        url(r'^signout/$', 'signout', name='signout'),
                        url(r'^settings/$', 'account_settings', name='settings'),
