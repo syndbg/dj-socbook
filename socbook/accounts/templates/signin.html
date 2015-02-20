@@ -1,8 +1,24 @@
 {% extends 'base.html' %}
 
+{% load staticfiles %}
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/signin.css' %}">
+    <style type="text/css">
+        .cover {
+            background: url({% static 'img/cover.jpg' %}) no-repeat center center fixed;
+            padding-top: 0%;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+{% endblock head %}
 
-{% block body %}
-    <div class="cover">
+{% block new_body %}
+<body class="cover">
+    <a href="//github.com/syndbg/dj-socbook/"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://camo.githubusercontent.com/567c3a48d796e2fc06ea80409cc9dd82bf714434/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f6c6566745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_left_darkblue_121621.png"></a>
+    <div>
         <!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-bottom" role="navigation">
             <div class="container">
@@ -14,26 +30,21 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">Start Bootstrap</a>
+                    <a class="navbar-brand" href="#">Socbook</a>
                 </div>
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                         <li>
-                            <a href="#">About</a>
+                            <a href="//github.com/syndbg/">Author</a>
                         </li>
                         <li>
-                            <a href="#">Services</a>
-                        </li>
-                        <li>
-                            <a href="#">Contact</a>
+                            <a href="//github.com/syndbg/">Contact</a>
                         </li>
                     </ul>
                 </div>
-                <!-- /.navbar-collapse -->
-            </div>
-            <!-- /.container -->
-        </nav>
+            </div> <!-- /.container -->
+        </nav> <!-- /.navbar-collapse -->
 
         <!-- Page Content -->
          <div class="container">
@@ -41,7 +52,7 @@
                 <h2 class="form-signin-heading">Please sign in</h2>
                 {% csrf_token %}
                 <div class="form-group {% if form.username.errors%} has-error {% endif %}">
-                    <input class="form-control" type="email" id="username" name="{{ form.username.html_name }}" placeholder="Email address" required autofocus>
+                    <input class="form-control" type="email" id="id_username" name="{{ form.username.html_name }}" placeholder="Email address" required autofocus>
                     <label for="{{ form.username.id_for_label }}" class="sr-only">Email address</label>
                     {% for error in form.username.errors %}
                         <span class="control-label">{{ error|escape }}</span>
@@ -49,7 +60,7 @@
                 </div>
 
                 <div class="form-group {% if form.password.errors%} has-error {% endif %}">
-                    <input class="form-control" type="password" id="password" name="{{ form.password.html_name }}" placeholder="Password" required>
+                    <input class="form-control" type="password" id="id_password" name="{{ form.password.html_name }}" placeholder="Password" required>
                     <label for="{{ form.password.id_for_label }}" class="sr-only">Password</label>
                     {% for error in form.password.errors %}
                         <span class="control-label">{{ error|escape }}</span>
@@ -58,9 +69,11 @@
 
                 <div class="form-group">
                     <input class="btn btn-success btn-primary btn-block" type="submit" value="Signin" />
-                    <a class="btn btn-warning btn-block" href="{% url 'accounts:signup' %}">Let me Signup first</a>
+                    <a class="btn btn-warning btn-block" href="{% url 'accounts:signup' %}">Let me Sign up first</a>
+                    <a class="btn btn-danger btn-block" href="{% url 'accounts:password_forgotten' %}">I forgot my password</a>
                 </div>
             </form>
         </div> <!-- /container -->
     </div>
-{% endblock body %}
+</body>
+{% endblock new_body %}

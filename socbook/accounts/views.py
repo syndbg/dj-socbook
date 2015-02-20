@@ -2,7 +2,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from accounts.forms import SignupForm
+from accounts.forms import AccountSignupForm
 
 
 def signin(request):
@@ -13,11 +13,11 @@ def signin(request):
 
 def signup(request):
     if request.method == 'POST':
-        form = SignupForm(data=request.POST)
+        form = AccountSignupForm(data=request.POST)
         if form.is_valid():
             form.save()
             return redirect('/')
-    form = SignupForm()
+    form = AccountSignupForm()
     return render(request, 'signup.html', {'form': form})
 
 
@@ -27,8 +27,12 @@ def signout(request):
     return redirect('/')
 
 
+def password_forgotten(request):
+    pass
+
+
 @login_required
-def settings(request):
+def account_settings(request):
     pass
 
 
@@ -38,5 +42,15 @@ def picture_settings(request):
 
 
 @login_required
-def friend_settings(request):
+def friends_settings(request):
+    pass
+
+
+@login_required
+def password_settings(request):
+    pass
+
+
+@login_required
+def profile(request, profile_id):
     pass
