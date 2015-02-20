@@ -2,7 +2,6 @@ from django.conf.urls import patterns, url
 
 
 urlpatterns = patterns('accounts.views',
-                       url(r'', 'signin'),
                        url(r'^signin/$', 'signin', name='signin'),
                        url(r'^signup/$', 'signup', name='signup'),
                        url(r'^signout/$', 'signout', name='signout'),
@@ -12,5 +11,5 @@ urlpatterns = patterns('accounts.views',
                        url(r'^settings/password/$', 'password_settings', name='password_settings'),
                        url(r'^settings/picture/$', 'picture_settings', name='picture_settings'),
                        url(r'^settings/friends/$', 'friends_settings', name='friends_settings'),
-                       url(r'^(?P<username>\w+)/$', 'profile', name='profile')
+                       url(r'^(?P<profile_name>\w+)/$', 'profile', name='profile'),
 )

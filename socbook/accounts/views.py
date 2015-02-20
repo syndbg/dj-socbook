@@ -16,7 +16,7 @@ def signup(request):
         form = AccountSignupForm(data=request.POST)
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('accounts:signin')
         return render(request, 'signup.html', {'form': form})
     form = AccountSignupForm()
     return render(request, 'signup.html', {'form': form})
@@ -53,5 +53,5 @@ def password_settings(request):
 
 
 @login_required
-def profile(request, profile_id):
+def profile(request, profile_name):
     pass

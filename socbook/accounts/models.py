@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
@@ -48,15 +49,18 @@ class Account(AbstractUser):
 
 class Profile(models.Model):
     account = models.OneToOneField(Account, related_name='profile')
-    url = models.URLField(blank=False)
+    display_name = models.CharField(max_length=100, blank=True)
+
+    def get_absolute_url(self):
+        profile_name = self.display_name or self.account.username
+        return reverse('accounts:profile', args=[profile_name])
 
     @receiver(post_save, sender=Account)
     def create_profile(sender, instance, created, **kwargs):
         """Creates a Profile and emits a signal for Activity to pick up and create an Activity and later Notification."""
         if created:
-            url = '//{0}'.format(instance.username)
-            Profile.objects.create(account=instance, url=url)
-            new_profile_created.send(sender=instance.__class__, account=instance, url=url)
+            Profile.objects.create(account=instance)
+            new_profile_created.send(sender=instance.__class__, account=instance)
 
 
 class FriendRequest(models.Model):

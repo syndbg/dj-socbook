@@ -27,9 +27,9 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
-# Custom user
 AUTH_USER_MODEL = 'accounts.Account'
+
+LOGIN_URL = 'accounts:signin'
 
 # Application definition
 INSTALLED_APPS = (
@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'debug_toolbar',
     # User apps
     'accounts',
     'activities',
@@ -55,6 +56,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 )
 
 ROOT_URLCONF = 'socbook.urls'
