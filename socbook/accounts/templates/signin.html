@@ -36,15 +36,31 @@
         </nav>
 
         <!-- Page Content -->
-        <div class="container">
-            <div class="row">
-                <div class="col-md-6 col-sm-12">
-                    <h1>The Big Picture</h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magni, iusto, unde, sunt incidunt id sapiente rerum soluta voluptate harum veniam fuga odit ea pariatur vel eaque sint sequi tenetur eligendi.</p>
+         <div class="container">
+             <form class="form-signin" method="POST">
+                <h2 class="form-signin-heading">Please sign in</h2>
+                {% csrf_token %}
+                <div class="form-group {% if form.username.errors%} has-error {% endif %}">
+                    <input class="form-control" type="email" id="username" name="{{ form.username.html_name }}" placeholder="Email address" required autofocus>
+                    <label for="{{ form.username.id_for_label }}" class="sr-only">Email address</label>
+                    {% for error in form.username.errors %}
+                        <span class="control-label">{{ error|escape }}</span>
+                    {% endfor %}
                 </div>
-            </div>
-            <!-- /.row -->
-        </div>
-        <!-- /.container -->
+
+                <div class="form-group {% if form.password.errors%} has-error {% endif %}">
+                    <input class="form-control" type="password" id="password" name="{{ form.password.html_name }}" placeholder="Password" required>
+                    <label for="{{ form.password.id_for_label }}" class="sr-only">Password</label>
+                    {% for error in form.password.errors %}
+                        <span class="control-label">{{ error|escape }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group">
+                    <input class="btn btn-success btn-primary btn-block" type="submit" value="Signin" />
+                    <a class="btn btn-warning btn-block" href="{% url 'accounts:signup' %}">Let me Signup first</a>
+                </div>
+            </form>
+        </div> <!-- /container -->
     </div>
 {% endblock body %}
