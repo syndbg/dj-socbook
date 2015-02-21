@@ -22,6 +22,7 @@
 <body class="cover">
     {% include 'github_ribbon.html' %}
     {% include 'footer_anonymous_nav.html' %}
+    {% include 'terms_and_conditions.html' %}
 
     <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
        <form action="{% url 'accounts:signup' %}" role="form" method="POST">
@@ -41,6 +42,11 @@
                    <div class="form-group">
                        <label class="sr-only" for="{{ form.first_name.id_for_label }}">First name</label>
                        <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" class="form-control input-lg" placeholder="First Name" tabindex="1" autofocus required>
+                       {% if form.first_name.errors %}
+                        {% for error in form.first_name.errors %}
+                            <label for="{{ form.first_name.id_for_label }}" class="help-block">{{ error }}</label>
+                        {% endfor %}
+                       {% endif %}
                    </div>
                </div>
                <div class="col-xs-12 col-sm-6 col-md-6">
@@ -94,6 +100,11 @@
            </div>
        </form>
    </div>
-   {% include 'terms_and_conditions.html' %}
+
+
+   <script charset="utf-8">
+   </script>
+
+   <script src="{% static 'js/enable_tooltips.js' %}"></script>
 </body>
 {% endblock new_body %}
