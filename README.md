@@ -10,6 +10,16 @@ A Django Social Network (facebook) clone/example.
 * [architecture](ARCHITECTURE.md)
 * design (TO-DO)
 
+## How it looks
+
+**Cover and Sign in**
+
+![Cover / Sign in](http://i.imgur.com/MYB9WxU.png?1 "Cover / Sign in")
+
+**Sign up**
+
+![Sign up](http://i.imgur.com/ZVMXQEK.png?1 "Sign up")
+
 
 ## Roadmap
 
