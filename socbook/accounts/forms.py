@@ -4,7 +4,6 @@ from accounts.models import Account
 
 
 class AccountSignupForm(forms.ModelForm):
-    email = forms.EmailField(help_text='The email you will use to login and restore your password if forgotten.')
     gender = forms.ChoiceField(choices=Account.GENDERS, initial=Account.SECRET, widget=forms.RadioSelect)
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput,
                                 help_text='The password you will use to login.')

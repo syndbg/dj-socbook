@@ -1,10 +1,35 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from accounts.signals import account_befriended, friend_request_accepted, friend_request_rejected, friend_request_sent, new_profile_created
+
+
+class AccountManager(BaseUserManager):
+
+    def __create_user(self, email, password, is_staff, is_superuser,
+                      first_name, last_name, works_at):
+        if not email:
+            raise ValueError('Accounts must have an email address')
+
+        email = self.normalize_email(email)
+        user = self.model(username=email, email=email,
+                          is_staff=is_staff, is_superuser=is_superuser,
+                          first_name=first_name, last_name=last_name,
+                          works_at=works_at)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_user(self, email, password, first_name='', last_name='', works_at=None):
+        return self.__create_user(email, password, False, False,
+                                  first_name, last_name, works_at)
+
+    def create_superuser(self, email, password, first_name='', last_name='', works_at=None):
+        return self.__create_user(email, password, True, True,
+                                  first_name, last_name, works_at)
 
 
 class Account(AbstractUser):
@@ -19,7 +44,12 @@ class Account(AbstractUser):
     location = models.CharField(max_length=75, blank=True)
     site = models.URLField(blank=True)
 
+    AbstractUser._meta.get_field('email').help_text = 'The email you will use to login and restore your password if forgotten.'
     AbstractUser._meta.get_field('email')._unique = True
+    AbstractUser._meta.get_field('username').max_length = 75
+    objects = AccountManager()
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
     def befriend(self, other_account):
         """Adds accounts in both accounts' friends fields and emits a signal for Activity and Notification to pick up."""
@@ -49,7 +79,7 @@ class Account(AbstractUser):
 
 class Profile(models.Model):
     account = models.OneToOneField(Account, related_name='profile')
-    display_name = models.CharField(max_length=100, blank=True)
+    display_name = models.CharField(max_length=100, blank=True, help_text='The <display_name> that will be used in the URL to reach this profile.')
 
     def get_absolute_url(self):
         profile_name = self.display_name or self.account.username
