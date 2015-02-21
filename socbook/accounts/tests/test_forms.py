@@ -42,7 +42,11 @@ class AccountSignupFormTests(TestCase):
     def test_form_creates_instance_when_given_valid_data(self):
         self.form = AccountSignupForm(self.good_data)
         self.assertTrue(self.form.is_valid())
+        pre_save = Account.objects.count()
         account = self.form.save()
+        after_save = Account.objects.count()
+
+        self.assertEqual(after_save, pre_save + 1)
         self.assertEqual(account.first_name, self.given_first_name)
         self.assertEqual(account.last_name, self.given_last_name)
         self.assertEqual(account.gender, self.given_gender)
