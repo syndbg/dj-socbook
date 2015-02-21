@@ -44,6 +44,8 @@ class Account(AbstractUser):
     location = models.CharField(max_length=75, blank=True)
     site = models.URLField(blank=True)
 
+    AbstractUser._meta.get_field('first_name').help_text = 'Your first name'
+    AbstractUser._meta.get_field('last_name').help_text = 'Your last name'
     AbstractUser._meta.get_field('email').help_text = 'The email you will use to login and restore your password if forgotten.'
     AbstractUser._meta.get_field('email')._unique = True
     AbstractUser._meta.get_field('username').max_length = 75
