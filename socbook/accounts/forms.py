@@ -4,10 +4,12 @@ from accounts.models import Account
 
 
 class AccountSignupForm(forms.ModelForm):
-    gender = forms.ChoiceField(choices=Account.GENDERS, widget=forms.RadioSelect)
-    password1 = forms.CharField(label='Password', widget=forms.PasswordInput)
+    email = forms.EmailField(help_text='The email you will use to login and restore your password if forgotten.')
+    gender = forms.ChoiceField(choices=Account.GENDERS, initial=Account.SECRET, widget=forms.RadioSelect)
+    password1 = forms.CharField(label='Password', widget=forms.PasswordInput,
+                                help_text='The password you will use to login.')
     password2 = forms.CharField(label='Password Confirmation', widget=forms.PasswordInput,
-                                help_text='Enter the same password as above, for verification.')
+                                help_text='Enter the same password, for verification.')
 
     error_messages = {
         'password_mismatch': 'The two password fields didn\'t match.',
@@ -15,7 +17,7 @@ class AccountSignupForm(forms.ModelForm):
 
     class Meta:
         model = Account
-        fields = ['first_name', 'last_name', 'username', 'email', 'gender']
+        fields = ['first_name', 'last_name', 'email', 'gender']
 
     def clean_password2(self):
         password1 = self.cleaned_data.get('password1')

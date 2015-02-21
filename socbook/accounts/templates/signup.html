@@ -56,10 +56,10 @@
                    </div>
                </div>
            </div>
-           <div class="form-group">
+           <!-- <div class="form-group">
                <label class="sr-only" for="{{ form.username.id_for_label }}">Username</label>
                <input type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" class="form-control input-lg" placeholder="Username" tabindex="3" required>
-           </div>
+           </div> -->
            <div class="form-group">
                <label class="sr-only" for="{{ form.email.id_for_label }}">Email</label>
                <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" class="form-control input-lg" placeholder="Email Address" tabindex="4" required>
@@ -95,16 +95,32 @@
            </div>
            <hr>
            <div class="row">
-               <div class="col-xs-12 col-md-6"><input type="submit" value="Register" class="btn btn-danger btn-block btn-lg" tabindex="7"></div>
-               <div class="col-xs-12 col-md-6"><a href="{% url 'accounts:signin' %}" class="btn btn-warning btn-block btn-lg">Sign In</a></div>
+               <div class="col-xs-12 col-md-6">
+                   <input type="submit" value="Register" class="btn btn-danger btn-block btn-lg" tabindex="7">
+               </div>
+               <div class="col-xs-12 col-md-6">
+                   <a href="{% url 'accounts:signin' %}" class="btn btn-warning btn-block btn-lg">Sign In</a>
+               </div>
            </div>
        </form>
    </div>
 
 
    <script charset="utf-8">
+    $(document).ready(function() {
+        {% for field in form.visible_fields %}
+            {% if field.help_text %}
+                var $tag = $("input[id=\"{{ field.id_for_label }}\"]");
+                $tag.attr({
+                    "data-toggle": "tooltip",
+                    "data-placement": "top",
+                    "title": "{{ field.help_text}}",
+                    "trigger": "hover focus",
+                });
+            {% endif %}
+        {% endfor %}
+    });
    </script>
-
    <script src="{% static 'js/enable_tooltips.js' %}"></script>
 </body>
 {% endblock new_body %}
