@@ -3,6 +3,9 @@ from django import forms
 from accounts.models import Account
 
 
+PASSWORDS_MISMATCH_ERROR = 'The two password fields didn\'t match.'
+
+
 class AccountSignupForm(forms.ModelForm):
     gender = forms.ChoiceField(choices=Account.GENDERS, initial=Account.SECRET, widget=forms.RadioSelect)
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput,
@@ -11,7 +14,7 @@ class AccountSignupForm(forms.ModelForm):
                                 help_text='Enter the same password, for verification.')
 
     error_messages = {
-        'password_mismatch': 'The two password fields didn\'t match.',
+        'password_mismatch': PASSWORDS_MISMATCH_ERROR,
     }
 
     class Meta:
@@ -24,7 +27,7 @@ class AccountSignupForm(forms.ModelForm):
         if password1 and password2 and password1 != password2:
             raise forms.ValidationError(self.error_messages['password_mismatch'],
                                         code='password_mismatch',
-            )
+                                        )
         return password2
 
     def save(self, commit=True):
