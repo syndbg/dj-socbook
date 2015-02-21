@@ -10,26 +10,25 @@ from accounts.signals import account_befriended, friend_request_accepted, friend
 class AccountManager(BaseUserManager):
 
     def __create_user(self, email, password, is_staff, is_superuser,
-                      first_name, last_name, works_at):
+                      first_name, last_name):
         if not email:
             raise ValueError('Accounts must have an email address')
 
         email = self.normalize_email(email)
         user = self.model(username=email, email=email,
                           is_staff=is_staff, is_superuser=is_superuser,
-                          first_name=first_name, last_name=last_name,
-                          works_at=works_at)
+                          first_name=first_name, last_name=last_name)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password, first_name='', last_name='', works_at=None):
+    def create_user(self, email, password, first_name='', last_name=''):
         return self.__create_user(email, password, False, False,
-                                  first_name, last_name, works_at)
+                                  first_name, last_name)
 
-    def create_superuser(self, email, password, first_name='', last_name='', works_at=None):
+    def create_superuser(self, email, password, first_name='', last_name=''):
         return self.__create_user(email, password, True, True,
-                                  first_name, last_name, works_at)
+                                  first_name, last_name)
 
 
 class Account(AbstractUser):
