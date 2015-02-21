@@ -72,11 +72,9 @@ class ProfileModelTests(TestCase):
 
     def test_creates_profile_on_account_post_save_signal(self):
         before_profile_count = Profile.objects.count()
-        account = Account.objects.create(username='syndbg', first_name='Anton', last_name='Antonov', gender=Account.MALE, email='asd@asd.com')
-        profile = Profile.objects.last()
+        Account.objects.create(username='syndbg', first_name='Anton', last_name='Antonov', gender=Account.MALE, email='asd@asd.com')
+        Profile.objects.last()
         after_profile_count = Profile.objects.count()
-
-        self.assertEqual('//{0}'.format(account.username), profile.url)
         self.assertEqual(after_profile_count, before_profile_count + 1)
 
 
