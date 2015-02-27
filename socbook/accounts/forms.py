@@ -67,7 +67,7 @@ class PasswordSettingsForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-        self.account.password = self.cleaned_data['new_password2']
+        self.account.set_password(self.cleaned_data['new_password2'])
         if commit:
             self.account.save()
         return self.account
