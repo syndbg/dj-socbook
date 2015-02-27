@@ -1,6 +1,6 @@
 from django import forms
 
-from accounts.models import Account
+from accounts.models import Account, Profile
 
 
 PASSWORDS_MISMATCH_ERROR = 'The two password fields didn\'t match.'
@@ -50,10 +50,14 @@ class PasswordSettingsForm(forms.ModelForm):
     new_password1 = forms.CharField(label='New password', widget=forms.PasswordInput())
     new_password2 = forms.CharField(label='Confirm new password', widget=forms.PasswordInput)
 
+    def __init__(self, *args, **kwargs):
+        self.account = kwargs.pop('for_account')
+        super().__init__(*args, **kwargs)
+
     def clean(self):
         cleaned_data = super().clean()
 
-        if not Account.check_password(cleaned_data['current_password']):
+        if not self.account.check_password(cleaned_data['current_password']):
             self.add_error('current_password', 'Current password mismatch. Please try again!')
 
         new_password1 = cleaned_data['new_password1']
@@ -63,15 +67,10 @@ class PasswordSettingsForm(forms.ModelForm):
         return cleaned_data
 
     def save(self, commit=True):
-        account = self.instance
-        account.password = self.cleaned_data['new_password2']
+        self.account.password = self.cleaned_data['new_password2']
         if commit:
-            account.save()
-        return account
-
-    class Meta:
-        model = Account
-        fields = ['']
+            self.account.save()
+        return self.account
 
 
 # TO-DO: Have a clear idea what it should do
@@ -82,5 +81,5 @@ class PictureSettingsForm(forms.Form):
 class FriendsSettingsForm(forms.ModelForm):
 
     class Meta:
-        model = Account
+        model = Profile
         fields = ['display_name']
