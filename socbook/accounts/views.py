@@ -54,7 +54,7 @@ def password_settings(request):
             form.save()
     else:
         form = PasswordSettingsForm(instance=account)
-    return render(request, 'account_settings.html', {'form': form})
+    return render(request, 'password_settings.html', {'form': form})
 
 
 @login_required
