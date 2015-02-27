@@ -2,7 +2,7 @@ from django.contrib.auth import views as auth_views
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from accounts.forms import AccountSignupForm
+from accounts.forms import AccountSignupForm, AccountSettingsForm, PasswordSettingsForm, PictureSettingsForm, FriendsSettingsForm
 
 
 def signin(request):
@@ -34,7 +34,27 @@ def password_forgotten(request):
 
 @login_required
 def account_settings(request):
-    pass
+    account = request.user
+    if request.method == 'POST':
+        form = AccountSettingsForm(data=request.POST, instance=account)
+        if form.is_valid():
+            form.save()
+    else:
+        form = AccountSettingsForm(instance=account, initial={'first_name': account.first_name, 'last_name': account.last_name,
+                                                              'email': account.email, 'gender': account.gender})
+    return render(request, 'account_settings.html', {'form': form})
+
+
+@login_required
+def password_settings(request):
+    account = request.user
+    if request.method == 'POST':
+        form = PasswordSettingsForm(data=request.POST, instance=account)
+        if form.is_valid():
+            form.save()
+    else:
+        form = PasswordSettingsForm(instance=account)
+    return render(request, 'account_settings.html', {'form': form})
 
 
 @login_required
@@ -44,12 +64,14 @@ def picture_settings(request):
 
 @login_required
 def friends_settings(request):
-    pass
-
-
-@login_required
-def password_settings(request):
-    pass
+    account = request.user
+    if request.method == 'POST':
+        form = FriendsSettingsForm(data=request.POST, instance=account)
+        if form.is_valid():
+            form.save()
+    else:
+        form = FriendsSettingsForm(instance=account, initial={'display_name': account.display_name})
+    return render(request, 'friends_settings.html', {'form': form})
 
 
 @login_required

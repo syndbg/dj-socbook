@@ -37,3 +37,50 @@ class AccountSignupForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class AccountSettingsForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = ['first_name', 'last_name', 'email', 'gender']
+
+
+class PasswordSettingsForm(forms.ModelForm):
+    current_password = forms.CharField(label='Current password', widget=forms.PasswordInput(),)
+    new_password1 = forms.CharField(label='New password', widget=forms.PasswordInput())
+    new_password2 = forms.CharField(label='Confirm new password', widget=forms.PasswordInput)
+
+    def clean(self):
+        cleaned_data = super().clean()
+
+        if not Account.check_password(cleaned_data['current_password']):
+            self.add_error('current_password', 'Current password mismatch. Please try again!')
+
+        new_password1 = cleaned_data['new_password1']
+        new_password2 = cleaned_data['new_password2']
+        if new_password1 != new_password2:
+            self.add_error('new_password2', 'New passwords don\'t match. Try again!')
+        return cleaned_data
+
+    def save(self, commit=True):
+        account = self.instance
+        account.password = self.cleaned_data['new_password2']
+        if commit:
+            account.save()
+        return account
+
+    class Meta:
+        model = Account
+        fields = ['']
+
+
+# TO-DO: Have a clear idea what it should do
+class PictureSettingsForm(forms.Form):
+    pass
+
+
+class FriendsSettingsForm(forms.ModelForm):
+
+    class Meta:
+        model = Account
+        fields = ['display_name']
