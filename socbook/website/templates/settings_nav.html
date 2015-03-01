@@ -1,0 +1,8 @@
+ <nav>
+    <ul class="nav nav-tabs nav-justified">
+        <li role="navigation" {% if active == 'account_settings' %} class="active" {% endif %}><a href="{% url 'accounts:account_settings' %}">Account settings</a></li>
+        <li role="navigation" {% if active == 'password_settings' %} class="active" {% endif %}><a href="{% url 'accounts:password_settings' %}">Password settings</a></li>
+        <li role="navigation" {% if active == 'friends_settings' %} class="active" {% endif %}><a href="{% url 'accounts:friends_settings' %}">Friends settings</a></li>
+        <li role="navigation" {% if active == 'picture_settings' %} class="active" {% endif %}><a href="{% url 'accounts:picture_settings' %}">Picture settings</a></li>
+    </ul>
+</nav>

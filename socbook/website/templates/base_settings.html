@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/settings.css' %}">
+{% endblock head %}
+
+{% block body %}
+<div class="container container-with-bg center-block">
+    <nav>
+        <ul class="nav nav-tabs nav-justified">
+            <li role="navigation" {% if active == 'account_settings' %} class="active" {% endif %}><a href="{% url 'accounts:account_settings' %}">Account settings</a></li>
+            <li role="navigation" {% if active == 'password_settings' %} class="active" {% endif %}><a href="{% url 'accounts:password_settings' %}">Password settings</a></li>
+            <li role="navigation" {% if active == 'friends_settings' %} class="active" {% endif %}><a href="{% url 'accounts:friends_settings' %}">Friends settings</a></li>
+            <li role="navigation" {% if active == 'picture_settings' %} class="active" {% endif %}><a href="{% url 'accounts:picture_settings' %}">Picture settings</a></li>
+        </ul>
+    </nav>
+
+    <div class="center-block">
+        {% include 'django_messages.html' %}
+
+        {% block form %}
+        <form>
+            {% for field in form.visible_fields %}
+              <div class="form-group {% if field.errors %} has-error {% endif %}">
+                <label for="{{ field.label }}" class="col-xs-2 control-label">{{ field.label }}</label>
+                <div class="col-xs-10">
+                  {{ field }}
+                  {% if field.help_text %}
+                    <p class="help-block">{{ field.help_text }}</p>
+                  {% endif %}
+                  {% for error in field.errors %}
+                    <label class="control-label">{{ error }}</label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                   <input type="submit" value="Change" class="btn btn-danger">
+               </div>
+            </div>
+        </form>
+        {% endblock form %}
+    </div>
+</div>
+
+{% endblock body %}

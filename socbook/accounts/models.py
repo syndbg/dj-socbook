@@ -84,7 +84,7 @@ class Account(AbstractUser):
 
 class Profile(models.Model):
     account = models.OneToOneField(Account, related_name='profile')
-    display_name = models.CharField(max_length=100, blank=True, help_text='The <display_name> that will be used in the URL to reach this profile.')
+    display_name = models.CharField(max_length=100, blank=True, help_text='The <display_name> will be used to reach your profile via URL.')
 
     def get_absolute_url(self):
         profile_name = self.display_name or self.account.username

@@ -4,6 +4,7 @@ from django.contrib import admin
 urlpatterns = patterns('',
                        url(r'^admin/', include(admin.site.urls)),
                        url(r'', include('accounts.urls', namespace='accounts')),
+                       url(r'', include('website.urls', namespace='website')),
 
                        url(r'^password_reset/$', 'django.contrib.auth.views.password_reset',
                            {'template_name': 'password_reset.html'}, name='password_reset'),

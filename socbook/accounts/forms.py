@@ -45,7 +45,7 @@ class AccountSettingsForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'email', 'gender']
 
 
-class PasswordSettingsForm(forms.ModelForm):
+class PasswordSettingsForm(forms.Form):
     current_password = forms.CharField(label='Current password', widget=forms.PasswordInput(),)
     new_password1 = forms.CharField(label='New password', widget=forms.PasswordInput())
     new_password2 = forms.CharField(label='Confirm new password', widget=forms.PasswordInput)

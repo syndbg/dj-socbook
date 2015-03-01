@@ -42,19 +42,19 @@ def account_settings(request):
     else:
         form = AccountSettingsForm(instance=account, initial={'first_name': account.first_name, 'last_name': account.last_name,
                                                               'email': account.email, 'gender': account.gender})
-    return render(request, 'account_settings.html', {'form': form})
+    return render(request, 'account_settings.html', {'form': form, 'active': 'account_settings'})
 
 
 @login_required
 def password_settings(request):
     account = request.user
     if request.method == 'POST':
-        form = PasswordSettingsForm(data=request.POST, instance=account)
+        form = PasswordSettingsForm(data=request.POST, for_account=account)
         if form.is_valid():
             form.save()
     else:
-        form = PasswordSettingsForm(instance=account)
-    return render(request, 'password_settings.html', {'form': form})
+        form = PasswordSettingsForm(for_account=account)
+    return render(request, 'password_settings.html', {'form': form, 'active': 'password_settings'})
 
 
 @login_required
@@ -65,13 +65,14 @@ def picture_settings(request):
 @login_required
 def friends_settings(request):
     account = request.user
+    profile = account.profile
     if request.method == 'POST':
-        form = FriendsSettingsForm(data=request.POST, instance=account)
+        form = FriendsSettingsForm(data=request.POST, instance=profile)
         if form.is_valid():
             form.save()
     else:
-        form = FriendsSettingsForm(instance=account, initial={'display_name': account.display_name})
-    return render(request, 'friends_settings.html', {'form': form})
+        form = FriendsSettingsForm(instance=profile, initial={'display_name': profile.display_name})
+    return render(request, 'friends_settings.html', {'form': form, 'active': 'friends_settings'})
 
 
 @login_required
