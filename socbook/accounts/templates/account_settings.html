@@ -1,10 +1,56 @@
 {% extends 'base.html' %}
 
+{% block head %}
+<style>
+    form {
+        margin-top: 2rem;
+    }
+</style>
+{% endblock head %}
+
 {% block body %}
-<ul class="nav nav-tabs nav-justified">
-    <li role="navigation" class="active"><a href="{% url 'accounts:account_settings' %}">Account settings</a></li>
-    <li role="navigation" class="active"><a href="{% url 'accounts:friends_settings' %}">Friends settings</a></li>
-    <li role="navigation" class="active"><a href="{% url 'accounts:password_settings' %}">Password settings</a></li>
-    <li role="navigation" class="active"><a href="{% url 'accounts:picture_settings' %}">Picture settings</a></li>
-</ul>
+<div class="container container-with-bg center-block">
+    <nav>
+        <ul class="nav nav-tabs nav-justified">
+            <li role="navigation" class="active"><a href="{% url 'accounts:account_settings' %}">Account settings</a></li>
+            <li role="navigation"><a href="{% url 'accounts:friends_settings' %}">Friends settings</a></li>
+            <li role="navigation"><a href="{% url 'accounts:password_settings' %}">Password settings</a></li>
+            <li role="navigation"><a href="{% url 'accounts:picture_settings' %}">Picture settings</a></li>
+        </ul>
+    </nav>
+
+    <div class="center-block">
+        {% if messages %}
+            {% for message in messages %}
+              <div class="alert alert-success alert-dismissable">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message }}
+              </div>
+            {% endfor %}
+        {% endif %}
+
+        <form action="{% url 'accounts:account_settings' %}">
+            {% for field in form.visible_fields %}
+              <div class="form-group{% if field.errors %} has-error {% endif %}">
+                <label for="{{ field.label }}" class="col-xs-2 control-label">{{ field.label }}</label>
+                <div class="col-xs-10">
+                  {{ field }}
+                  {% if field.help_text %}
+                    <p class="help-block">{{ field.help_text }}</p>
+                  {% endif %}
+                  {% for error in field.errors %}
+                    <label class="control-label">{{ error }}</label>
+                  {% endfor %}
+                </div>
+              </div>
+            {% endfor %}
+            <div class="form-group">
+                <div class="col-xs-offset-2 col-xs-10">
+                   <input type="submit" value="Change" class="btn btn-danger">
+               </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 {% endblock body %}
