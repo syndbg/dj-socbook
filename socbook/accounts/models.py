@@ -53,6 +53,9 @@ class Account(AbstractUser):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
+    def __str__(self):
+        return '{0} {1}'.format(self.first_name, self.last_name)
+
     def befriend(self, other_account):
         """Adds accounts in both accounts' friends fields and emits a signal for Activity and Notification to pick up."""
         if not self.is_friend(other_account):
