@@ -1,126 +1,105 @@
-{% extends 'base.html' %}
+{% extends 'base_cover.html' %}
 
 {% load staticfiles %}
 
 {% block title %}Sign up | Socbook{% endblock title %}
 
-{% block head %}
-    <link rel="stylesheet" type="text/css"  href="{% static 'css/signup.css' %}" charset="utf-8">
-    <style type="text/css">
-        .cover {
-            background: url({% static 'img/cover.jpg' %}) no-repeat center center fixed;
-            padding-top: 0%;
-            -webkit-background-size: cover;
-            -moz-background-size: cover;
-            -o-background-size: cover;
-            background-size: cover;
-        }
-    </style>
-{% endblock head %}
-
-{% block new_body %}
-<body class="cover">
-    {% include 'github_ribbon.html' %}
-    {% include 'footer_anonymous_nav.html' %}
-    {% include 'terms_and_conditions.html' %}
-
-    <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
-       <form action="{% url 'accounts:signup' %}" role="form" method="POST">
-           {% csrf_token %}
-           <h2>Please Sign Up <small>It's free and always will be.</small></h2>
-           <hr>
-           {% if form.non_field_errors %}
-             {% for error in form.non_field_errors %}
-               <div class="alert alert-danger alert-dismissable" role="alert">
-                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                 {{ error }}
-               </div>
-             {% endfor %}
-           {% endif %}
-           <div class="row">
-               <div class="col-xs-12 col-sm-6 col-md-6">
-                   <div class="form-group">
-                       <label class="sr-only" for="{{ form.first_name.id_for_label }}">First name</label>
-                       <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" class="form-control input-lg" placeholder="First Name" tabindex="1" autofocus required>
-                       {% if form.first_name.errors %}
-                        {% for error in form.first_name.errors %}
-                            <label for="{{ form.first_name.id_for_label }}" class="help-block">{{ error }}</label>
-                        {% endfor %}
-                       {% endif %}
-                   </div>
-               </div>
-               <div class="col-xs-12 col-sm-6 col-md-6">
-                   <div class="form-group">
-                       <label class="sr-only" for="{{ form.last_name.id_for_label }}">Last name</label>
-                       <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" class="form-control input-lg" placeholder="Last Name" tabindex="2" required>
-                   </div>
+{% block content %}
+<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+   <form action="{% url 'accounts:signup' %}" role="form" method="POST">
+       {% csrf_token %}
+       <h2>Please Sign Up <small>It's free and always will be.</small></h2>
+       <hr>
+       {% if form.non_field_errors %}
+         {% for error in form.non_field_errors %}
+           <div class="alert alert-danger alert-dismissable" role="alert">
+             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+             {{ error }}
+           </div>
+         {% endfor %}
+       {% endif %}
+       <div class="row">
+           <div class="col-xs-12 col-sm-6 col-md-6">
+               <div class="form-group">
+                   <label class="sr-only" for="{{ form.first_name.id_for_label }}">First name</label>
+                   <input type="text" name="{{ form.first_name.html_name }}" id="{{ form.first_name.id_for_label }}" class="form-control input-lg" placeholder="First Name" tabindex="1" autofocus required>
+                   {% if form.first_name.errors %}
+                    {% for error in form.first_name.errors %}
+                        <label for="{{ form.first_name.id_for_label }}" class="help-block">{{ error }}</label>
+                    {% endfor %}
+                   {% endif %}
                </div>
            </div>
-           <!-- <div class="form-group">
-               <label class="sr-only" for="{{ form.username.id_for_label }}">Username</label>
-               <input type="text" name="{{ form.username.html_name }}" id="{{ form.username.id_for_label }}" class="form-control input-lg" placeholder="Username" tabindex="3" required>
-           </div> -->
-           <div class="form-group">
-               <label class="sr-only" for="{{ form.email.id_for_label }}">Email</label>
-               <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" class="form-control input-lg" placeholder="Email Address" tabindex="4" required>
-           </div>
-           <div class="row">
-               <div class="col-xs-12 col-sm-6 col-md-6">
-                   <div class="form-group">
-                       <label class="sr-only" for="{{ form.password1.id_for_label }}">Password</label>
-                       <input type="password" name="{{ form.password1.html_name }}" id="{{ form.password1.id_for_label }}" class="form-control input-lg" placeholder="Password" tabindex="5" required>
-                   </div>
-               </div>
-               <div class="col-xs-12 col-sm-6 col-md-6">
-                   <div class="form-group">
-                       <label class="sr-only" for="{{ form.password2.id_for_label }}">Confirm Password</label>
-                       <input type="password" name="{{ form.password2.html_name }}" id="{{ form.password2.id_for_label }}" class="form-control input-lg" placeholder="Confirm Password" tabindex="6" required>
-                   </div>
+           <div class="col-xs-12 col-sm-6 col-md-6">
+               <div class="form-group">
+                   <label class="sr-only" for="{{ form.last_name.id_for_label }}">Last name</label>
+                   <input type="text" name="{{ form.last_name.html_name }}" id="{{ form.last_name.id_for_label }}" class="form-control input-lg" placeholder="Last Name" tabindex="2" required>
                </div>
            </div>
+       </div>
 
-           <div class="form-group">
-               {% for radio in form.gender %}
-                   <label class="radio-inline" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
-                   {{ radio.tag }}
-               {% endfor %}
-           </div>
-
-           <div class="row">
-               <div class="col-xs-8 col-sm-9 col-md-9">
-                    <p class="bg-info">
-                        By clicking <strong class="label label-danger">Register</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#terms_and_conditions">Terms and Conditions</a> set out by this site, including our Cookie Use.
-                    </p>
+       <div class="form-group">
+           <label class="sr-only" for="{{ form.email.id_for_label }}">Email</label>
+           <input type="email" name="{{ form.email.html_name }}" id="{{ form.email.id_for_label }}" class="form-control input-lg" placeholder="Email Address" tabindex="4" required>
+       </div>
+       <div class="row">
+           <div class="col-xs-12 col-sm-6 col-md-6">
+               <div class="form-group">
+                   <label class="sr-only" for="{{ form.password1.id_for_label }}">Password</label>
+                   <input type="password" name="{{ form.password1.html_name }}" id="{{ form.password1.id_for_label }}" class="form-control input-lg" placeholder="Password" tabindex="5" required>
                </div>
            </div>
-           <hr>
-           <div class="row">
-               <div class="col-xs-12 col-md-6">
-                   <input type="submit" value="Register" class="btn btn-danger btn-block btn-lg" tabindex="7">
-               </div>
-               <div class="col-xs-12 col-md-6">
-                   <a href="{% url 'accounts:signin' %}" class="btn btn-warning btn-block btn-lg">Sign In</a>
+           <div class="col-xs-12 col-sm-6 col-md-6">
+               <div class="form-group">
+                   <label class="sr-only" for="{{ form.password2.id_for_label }}">Confirm Password</label>
+                   <input type="password" name="{{ form.password2.html_name }}" id="{{ form.password2.id_for_label }}" class="form-control input-lg" placeholder="Confirm Password" tabindex="6" required>
                </div>
            </div>
-       </form>
-   </div>
+       </div>
+
+       <div class="form-group">
+           {% for radio in form.gender %}
+               <label class="radio-inline" for="{{ radio.id_for_label }}">{{ radio.choice_label }}</label>
+               {{ radio.tag }}
+           {% endfor %}
+       </div>
+
+       <div class="row">
+           <div class="col-xs-8 col-sm-9 col-md-9">
+                <p class="bg-info">
+                    By clicking <strong class="label label-danger">Register</strong>, you agree to the <a href="#" data-toggle="modal" data-target="#terms_and_conditions">Terms and Conditions</a> set out by this site, including our Cookie Use.
+                </p>
+           </div>
+       </div>
+       <hr>
+       <div class="row">
+           <div class="col-xs-12 col-md-6">
+               <input type="submit" value="Register" class="btn btn-danger btn-block btn-lg" tabindex="7">
+           </div>
+           <div class="col-xs-12 col-md-6">
+               <a href="{% url 'accounts:signin' %}" class="btn btn-warning btn-block btn-lg">Sign In</a>
+           </div>
+       </div>
+   </form>
+</div>
 
 
-   <script charset="utf-8">
-    $(document).ready(function() {
-        {% for field in form.visible_fields %}
-            {% if field.help_text %}
-                var $tag = $("input[id=\"{{ field.id_for_label }}\"]");
-                $tag.attr({
-                    "data-toggle": "tooltip",
-                    "data-placement": "top",
-                    "title": "{{ field.help_text}}",
-                    "trigger": "hover focus",
-                });
-            {% endif %}
-        {% endfor %}
-    });
-   </script>
-   <script src="{% static 'js/enable_tooltips.js' %}"></script>
-</body>
-{% endblock new_body %}
+{% block script %}
+<script charset="utf-8">
+$(document).ready(function() {
+    {% for field in form.visible_fields %}
+        {% if field.help_text %}
+            var $tag = $("input[id=\"{{ field.id_for_label }}\"]");
+            $tag.attr({
+                "data-toggle": "tooltip",
+                "data-placement": "top",
+                "title": "{{ field.help_text}}",
+                "trigger": "hover focus",
+            });
+        {% endif %}
+    {% endfor %}
+});
+</script>
+<script src="{% static 'js/enable_tooltips.js' %}"></script>
+{% endblock script %}
+{% endblock content %}

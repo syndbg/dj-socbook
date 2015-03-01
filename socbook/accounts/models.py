@@ -37,6 +37,7 @@ class Account(AbstractUser):
         (MALE, 'Male'),
         (FEMALE, 'Female'),
         (SECRET, 'Secret'))
+
     gender = models.SmallIntegerField(choices=GENDERS, default=SECRET)
     birthday = models.DateField(null=True)
     friends = models.ManyToManyField('self', symmetrical=True)

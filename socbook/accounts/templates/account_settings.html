@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<ul class="nav nav-tabs nav-justified">
+    <li role="navigation" class="active"><a href="{% url 'accounts:account_settings' %}">Account settings</a></li>
+    <li role="navigation" class="active"><a href="{% url 'accounts:friends_settings' %}">Friends settings</a></li>
+    <li role="navigation" class="active"><a href="{% url 'accounts:password_settings' %}">Password settings</a></li>
+    <li role="navigation" class="active"><a href="{% url 'accounts:picture_settings' %}">Picture settings</a></li>
+</ul>
+{% endblock body %}

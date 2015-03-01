@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load staticfiles %}
+
+{% block head %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/signin.css' %}">
+    <style type="text/css">
+        .cover {
+            background: url({% static 'img/cover.jpg' %}) no-repeat center center fixed;
+            padding-top: 0%;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+    </style>
+{% endblock head %}
+
+{% block new_body %}
+<body class="cover">
+     {% include 'github_ribbon.html' %}
+     {% include 'footer_anonymous_nav.html' %}
+
+    {% block content %}
+    {% endblock content %}
+
+    {{ script.super }}
+    {% block script %}
+    {% endblock script %}
+</body>
+{% endblock new_body %}
