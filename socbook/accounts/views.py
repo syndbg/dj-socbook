@@ -54,7 +54,7 @@ def password_settings(request):
         form = PasswordSettingsForm(data=request.POST, for_account=account)
         if form.is_valid() and form.has_changed():
             form.save()
-            messages.add_message(request, messages.SUCCESS, 'You\'ve updated your password successfully!')
+            messages.success(request, 'You\'ve updated your password successfully!')
     else:
         form = PasswordSettingsForm(for_account=account)
     return render(request, 'password_settings.html', {'form': form, 'active': 'password_settings'})
