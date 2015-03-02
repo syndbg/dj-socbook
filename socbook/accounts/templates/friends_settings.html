@@ -2,7 +2,8 @@
 
 
 {% block form %}
-<form action="{% url 'accounts:friends_settings' %}">
+<form action="{% url 'accounts:friends_settings' %}" role="form" method="POST">
+    {% csrf_token %}
     {% for field in form.visible_fields %}
       <div class="form-group {% if field.errors %} has-error {% endif %}">
         <label for="{{ field.label }}" class="col-xs-2 control-label">{{ field.label }}</label>

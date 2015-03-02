@@ -10,5 +10,5 @@ urlpatterns = patterns('accounts.views',
                        url(r'^settings/password/$', 'password_settings', name='password_settings'),
                        url(r'^settings/picture/$', 'picture_settings', name='picture_settings'),
                        url(r'^settings/friends/$', 'friends_settings', name='friends_settings'),
-                       url(r'^(?P<profile_name>\w+)/$', 'profile', name='profile'),
+                       url(r'^profile/(?P<profile_name>\w+)/$', 'profile', name='profile'),
                        )
