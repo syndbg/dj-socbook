@@ -85,21 +85,12 @@
 
 
 {% block script %}
+<script src="{% static 'js/form_tooltips.js' %}"></script>
 <script charset="utf-8">
-$(document).ready(function() {
-    {% for field in form.visible_fields %}
-        {% if field.help_text %}
-            var $tag = $("input[id=\"{{ field.id_for_label }}\"]");
-            $tag.attr({
-                "data-toggle": "tooltip",
-                "data-placement": "top",
-                "title": "{{ field.help_text}}",
-                "trigger": "hover focus",
-            });
-        {% endif %}
-    {% endfor %}
-});
+    $(document).ready(function() {
+        var form_fields = {{ json_form_fields|safe }};
+        activateFormTooltips(form_fields);
+    });
 </script>
-<script src="{% static 'js/enable_tooltips.js' %}"></script>
 {% endblock script %}
 {% endblock content %}

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
 from accounts.forms import AccountSignupForm, AccountSettingsForm, PasswordSettingsForm, PictureSettingsForm, FriendsSettingsForm
+from website.utils import form_fields_to_json
 
 
 def signin(request):
@@ -18,19 +19,17 @@ def signup(request):
         if form.is_valid():
             form.save()
             return redirect('accounts:signin')
-        return render(request, 'signup.html', {'form': form})
+        json_form_fields = form_fields_to_json(form)
+        return render(request, 'signup.html', {'form': form, 'json_form_fields': json_form_fields})
     form = AccountSignupForm()
-    return render(request, 'signup.html', {'form': form})
+    json_form_fields = form_fields_to_json(form)
+    return render(request, 'signup.html', {'form': form, 'json_form_fields': json_form_fields})
 
 
 @login_required
 def signout(request):
     auth_views.logout(request)
     return redirect('/')
-
-
-def password_forgotten(request):
-    pass
 
 
 @login_required
@@ -40,7 +39,7 @@ def account_settings(request):
         form = AccountSettingsForm(data=request.POST, instance=account)
         if form.is_valid() and form.has_changed():
             form.save()
-            messages.add_message(request, messages.SUCCESS, 'You\'ve updated your account successfully!')
+            messages.success(request, 'You\'ve updated your account successfully!')
     else:
         form = AccountSettingsForm(instance=account, initial={'first_name': account.first_name, 'last_name': account.last_name,
                                                               'email': account.email, 'gender': account.gender})
@@ -73,7 +72,7 @@ def friends_settings(request):
         form = FriendsSettingsForm(data=request.POST, instance=profile)
         if form.is_valid() and form.has_changed():
             form.save()
-            messages.add_message(request, messages.SUCCESS, 'You\'ve updated your display_name successfully!')
+            messages.success(request, 'You\'ve updated your display_name successfully!')
     else:
         form = FriendsSettingsForm(instance=profile, initial={'display_name': profile.display_name})
     return render(request, 'friends_settings.html', {'form': form, 'active': 'friends_settings'})
